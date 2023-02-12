@@ -22,6 +22,7 @@ body{
 }
 .row-image {
     width: 100px;
+    border-color: red;
 }
 .form-field {
     width: 250px;
