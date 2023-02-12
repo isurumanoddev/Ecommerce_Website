@@ -17,3 +17,15 @@ body{
     border-radius: 50%;
     font-size: 14px;
 }
+.display-3 {
+    color: red;
+}
+.row-image {
+    width: 100px;
+}
+.form-field {
+    width: 250px;
+    display: inline-block;
+    padding: 5px;
+
+}
