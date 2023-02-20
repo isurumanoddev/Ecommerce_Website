@@ -30,3 +30,14 @@ body{
     padding: 5px;
 
 }
+.box-element {
+    box-shadow: 0 0 16px;
+    background-color: #c53434;
+    border-radius: 4px;
+    padding: 10px;
+}
+.thumbnail {
+    width: 80%;
+    height: 80%;
+    box-shadow: -1px -3px 5px -2px ;
+}
