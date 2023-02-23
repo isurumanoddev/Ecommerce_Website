@@ -2,8 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 
-
-
 def store(request):
     context = {}
     return render(request, "Store.html", context)
@@ -17,6 +15,3 @@ def cart(request):
 def checkout(request):
     context = {}
     return render(request, "Checkout.html", context)
-
-
-
