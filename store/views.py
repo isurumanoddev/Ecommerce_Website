@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 def store(request):
     context = {}
-    return render(request, "Store.html", context)
+    return render(request, "Checkout.html", context)
 
 
 def cart(request):

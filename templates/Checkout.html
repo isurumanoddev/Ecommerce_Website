@@ -1,20 +1,101 @@
 <!DOCTYPE html>
 {% extends "Main.html" %}
+{% load static %}
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
 	      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-
+	<link rel="stylesheet" type="text/css" href="{% static "styles/main.css" %}">
 </head>
 <body>
-
 {% block content %}
 
-
+	<h1 class="display-6"> checkout </h1>
 	<div class="container">
-		<h1> checkout </h1>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="card" id="form-wrapper">
+					<form id="form">
+						<div id="user-info">
+							<br/>
+							<p class="card-title px-3">Customer Information : </p>
+							<hr/>
+							<div class="form-field">
+								<input required class="form-control" type="text" name="name" placeholder="Name...">
+							</div>
+							<div class="form-field">
+								<input required class="form-control" type="email" name="email" placeholder="Email...">
+							</div>
+						</div>
+
+						<div id="shipping-info" class="">
+							<hr/>
+							<p class="card-title px-3">Shipping Information : </p>
+							<hr/>
+							<div class="form-field mx-2">
+								<input required class="form-control" type="text" name="address"
+								       placeholder="Address...">
+							</div>
+							<div class="form-field mx-2">
+								<input required class="form-control" type="text" name="city" placeholder="City...">
+							</div>
+							<div class="form-field mx-2">
+								<input required class="form-control" type="text" name="state" placeholder="State...">
+							</div>
+							<div class="form-field mx-2">
+								<input required class="form-control" type="text" name="zipcode"
+								       placeholder="Zip Code...">
+							</div>
+							<div class="form-field mx-2">
+								<input required class="form-control" type="text" name="country"
+								       placeholder="Country...">
+							</div>
+						</div>
+						<hr/>
+						<div class="d-grid m-4">
+							<input type="submit" value="Continue" class="btn btn-success" id="form-button"
+							       style="display: block">
+						</div>
+
+
+					</form>
+				</div>
+
+				<br/>
+				<div class="card hidden" id="payment-info">
+					<small>Paypal Options</small>
+				</div>
+			</div>
+
+			<div class="col-lg-6">
+				<div class="card">
+					<div class="card-body">
+						<a class="btn btn-outline-dark" href="{% url "cart" %}">&#x2190; Back To Cart</a>
+					</div>
+
+
+					<hr/>
+					<h3 class="px-3">Order Summary</h3>
+					<hr/>
+					<div class="cart-row ">
+						<div style="flex: 2"><img src="{% static "images/b.webp" %}" class="row-image p-3 "></div>
+						<div style="flex: 2"><p> Rolex classic</p></div>
+						<div style="flex: 1"><p>$ 20</p></div>
+						<div style="flex: 1"><p>x2</p></div>
+
+					</div>
+					<hr/>
+
+					<h5 class="card-title px-3">Items : 2</h5>
+					<h5 class="card-title px-3">Total : $ 20</h5>
+
+
+				</div>
+
+			</div>
+		</div>
 	</div>
 
 
@@ -26,5 +107,5 @@
 	        crossorigin="anonymous"></script>
 
 {% endblock %}
-</body>
+</div></body>
 </html>
