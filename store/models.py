@@ -38,7 +38,23 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
+    @property
+    def get_cart_total(self):
+        order_items = self.orderitem_set.all()
+        total = 0
+        for item in order_items:
+            total += item.get_total
 
+        return total
+
+    @property
+    def get_cart_items(self):
+        order_items = self.orderitem_set.all()
+        total = 0
+        for item in order_items:
+            total += item.quantity
+
+        return total
 
 
 class OrderItem(models.Model):
@@ -47,7 +63,10 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
-
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total
 
 
 class ShippingAddress(models.Model):
