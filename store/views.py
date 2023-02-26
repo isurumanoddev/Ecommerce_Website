@@ -16,17 +16,26 @@ def cart(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         print(customer)
-        order ,created = Order.objects.get_or_create(customer=customer,complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
         items = []
+        order = {"get_cart_total": 0, "get_cart_items": 0}
 
-    context = {"items":items}
+    context = {"items": items, "order": order}
     return render(request, "Cart.html", context)
 
 
 def checkout(request):
-    context = {}
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {"get_cart_total": 0, "get_cart_items": 0}
+
+    context = {"items": items, "order": order}
     return render(request, "Checkout.html", context)
 
 
@@ -43,7 +52,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request,user)
+            login(request, user)
             return redirect("store")
     context = {}
     return render(request, "login.html", context)
@@ -52,5 +61,3 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("store")
-
-

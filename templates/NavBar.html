@@ -40,16 +40,17 @@
 				<div class="form-inline my-2 my-lg-0 d-flex justify-content-end">
 
 					{% if request.user.is_authenticated %}
-						<h3  class="mx-3 text-light">hello {{ request.user.username }} </h3>
+						<h3 class="mx-3 text-light">hello {{ request.user.username }} </h3>
 						<a href="{% url "logout" %}" class="btn btn-warning">Logout</a>
 					{% else %}
 						<a href="{% url "login" %}" class="btn btn-warning">Login</a>
 					{% endif %}
+
 					<a href="{% url "cart" %}">
 						<img src="{% static "images/c.png" %}" id="cart-icon">
 						{#						<p id="cart-total">0</p>#}
-
 					</a>
+
 				</div>
 
 			</div>
