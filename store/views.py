@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from store.models import Product
+from store.models import Product, Order
 
 
 def store(request):
@@ -13,7 +13,15 @@ def store(request):
 
 
 def cart(request):
-    context = {}
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        print(customer)
+        order ,created = Order.objects.get_or_create(customer=customer,complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+
+    context = {"items":items}
     return render(request, "Cart.html", context)
 
 
@@ -44,3 +52,5 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("store")
+
+
