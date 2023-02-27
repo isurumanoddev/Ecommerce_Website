@@ -2,6 +2,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 from store.models import Product, Order
 
@@ -61,3 +62,7 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("store")
+
+
+def update_item(request):
+    return JsonResponse("Item was added",safe=False)
