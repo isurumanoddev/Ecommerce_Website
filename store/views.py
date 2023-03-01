@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
-
+import json
 from store.models import Product, Order
 
 
@@ -65,4 +65,8 @@ def user_logout(request):
 
 
 def update_item(request):
+
+
+
+
     return JsonResponse("Item was added",safe=False)
