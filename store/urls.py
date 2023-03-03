@@ -11,7 +11,7 @@ urlpatterns = [
     path('user_login/', views.user_login, name="login"),
     path('user_logout/', views.user_logout, name="logout"),
 
-    path('clear_all/', views.clear_all, name="clear_all"),
+    path('delete_items/<str:pk>', views.delete_items, name="delete-items"),
 
     path('update_item/', views.update_item, name="update-item"),
 

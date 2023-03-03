@@ -15,7 +15,7 @@ def store(request):
     else:
         order = {"get_cart_total": 0, "get_cart_items": 0}
 
-    context = {"products": products,"order":order}
+    context = {"products": products, "order": order}
     return render(request, "Store.html", context)
 
 
@@ -26,7 +26,7 @@ def cart(request):
         items = order.orderitem_set.all()
     else:
         items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0,"shipping":False}
+        order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
 
     context = {"items": items, "order": order}
     return render(request, "Cart.html", context)
@@ -35,11 +35,11 @@ def cart(request):
 def checkout(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False,)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False, )
         items = order.orderitem_set.all()
     else:
         items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0,"shipping":False}
+        order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
 
     context = {"items": items, "order": order}
     return render(request, "Checkout.html", context)
@@ -89,6 +89,12 @@ def update_item(request):
 
     return JsonResponse("item was added", safe=False)
 
-def clear_all(request):
+
+def delete_items(request, pk):
+    order = Order.objects.get(id=pk)
+    if request.method == "POST":
+        order.delete()
+        return redirect("cart")
+
     context = {}
-    return render(request,"delete.html",context)
+    return render(request, "delete.html", context)
