@@ -9,7 +9,13 @@ from store.models import Product, Order, OrderItem
 
 def store(request):
     products = Product.objects.all()
-    context = {"products": products}
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order = Order.objects.get(customer=customer)
+    else:
+        order = {"get_cart_total": 0, "get_cart_items": 0}
+
+    context = {"products": products,"order":order}
     return render(request, "Store.html", context)
 
 
@@ -20,7 +26,7 @@ def cart(request):
         items = order.orderitem_set.all()
     else:
         items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
+        order = {"get_cart_total": 0, "get_cart_items": 0,"shipping":False}
 
     context = {"items": items, "order": order}
     return render(request, "Cart.html", context)
@@ -29,11 +35,11 @@ def cart(request):
 def checkout(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False,)
         items = order.orderitem_set.all()
     else:
         items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
+        order = {"get_cart_total": 0, "get_cart_items": 0,"shipping":False}
 
     context = {"items": items, "order": order}
     return render(request, "Checkout.html", context)
@@ -65,13 +71,11 @@ def user_logout(request):
 
 def update_item(request):
     data = json.loads(request.body)
-    productId = data["productId"]
+    product_id = data["productId"]
     action = data["action"]
-    print("productId :", productId, "action :", action)
-
+    product = Product.objects.get(id=product_id)
     customer = request.user.customer
-    product = Product.objects.get(id=productId)
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    order, created = Order.objects.get_or_create(complete=False, customer=customer)
 
     orderItem, created = OrderItem.objects.get_or_create(product=product, order=order)
 
@@ -79,11 +83,12 @@ def update_item(request):
         orderItem.quantity += 1
     elif action == "remove":
         orderItem.quantity -= 1
-
     orderItem.save()
-
     if orderItem.quantity <= 0:
         orderItem.delete()
 
+    return JsonResponse("item was added", safe=False)
 
-    return JsonResponse("Item was added", safe=False)
+def clear_all(request):
+    context = {}
+    return render(request,"delete.html",context)

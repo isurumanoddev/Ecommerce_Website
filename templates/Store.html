@@ -25,9 +25,12 @@
 						<div class="card-body">
 							<h6 class="card-title"><strong>{{ product.name }}</strong></h6>
 							<div class="card-footer">
-								<button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary update-cart ">Add to cart</button>
+								<button data-product="{{ product.id }}" data-action="add"
+								        class="btn btn-outline-secondary update-cart ">Add to cart
+								</button>
 								<a class="btn btn-outline-success " href="">View</a>
-								<h4 style="display: inline-block ; float: right">$ {{ product.price|floatformat:2 }}</h4>
+								<h4 style="display: inline-block ; float: right">
+									$ {{ product.price|floatformat:2 }}</h4>
 							</div>
 						</div>
 					</div>
@@ -40,8 +43,7 @@
 	        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
 	        crossorigin="anonymous"></script>
 
-	<script type = "text/javascript" src = "{% static "js/cart.js" %}"></script>
-
+	<script type="text/javascript" src="{% static "js/cart.js" %}"></script>
 {% endblock %}
 </body>
 </html>
