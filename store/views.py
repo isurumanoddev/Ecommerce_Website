@@ -94,7 +94,7 @@ def delete_items(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == "POST":
         order.delete()
-        return redirect("cart")
+        return redirect("store")
 
     context = {}
     return render(request, "delete.html", context)
