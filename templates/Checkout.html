@@ -114,6 +114,10 @@
         if (user !== "AnonymousUser") {
 			document.getElementById("user-info").innerHTML = ""
         }
+         if (shipping === "False" && user !== "AnonymousUser") {
+			document.getElementById("form-wrapper").classList.add("hidden")
+			document.getElementById("payment-info").classList.remove("hidden")
+        }
         const form = document.getElementById("form");
         form.addEventListener("submit", function (e) {
             e.preventDefault();
