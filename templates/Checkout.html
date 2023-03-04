@@ -106,6 +106,7 @@
 	        crossorigin="anonymous"></script>
 	<script type="text/javascript">
         const shipping ="{{ order.shipping }}"
+        const total ="{{ order.get_cart_total|floatformat:2 }}"
 		console.log(shipping)
 
         if (shipping === "False") {
@@ -132,6 +133,33 @@
 
         function submitFormData() {
             console.log("payment button clicked")
+
+            const userFormData ={
+                "name":null,
+                "email":null,
+                "total":total,
+            }
+            const shippingInfo ={
+                "address":null,
+                "city":null,
+                "state":null,
+                "zipcode":null,
+                "country":null,
+
+
+            }
+
+            if (shipping !== "False") {
+				shippingInfo.address = form.address.value
+				shippingInfo.city = form.city.value
+				shippingInfo.state = form.state.value
+				shippingInfo.zipcode = form.zipcode.value
+				shippingInfo.country = form.country.value
+            }
+
+
+
+
         }
 	</script>
 
