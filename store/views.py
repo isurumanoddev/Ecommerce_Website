@@ -21,17 +21,16 @@ def store(request):
 
 
 def cart(request):
-    global item_count
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
-        item_count = items.count()
+
     else:
         items = []
         order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
 
-    context = {"items": items, "order":order,"item_count":item_count}
+    context = {"items": items, "order":order}
     return render(request, "Cart.html", context)
 
 
@@ -74,6 +73,7 @@ def user_logout(request):
 
 
 def update_item(request):
+
     data = json.loads(request.body)
     product_id = data["productId"]
     action = data["action"]
