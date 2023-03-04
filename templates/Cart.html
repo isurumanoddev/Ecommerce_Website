@@ -31,8 +31,10 @@
 								<th>
 									<a style="float: right ; margin: 5px;" class="btn btn-success"
 									   href="{% url "checkout" %}">Checkout</a>
-									<a style="float: right ; margin: 5px;" class="btn btn-danger"
-									   href="{% url "delete-items" order.id %}">Clear All</a>
+									{% if order is not None %}
+										<a style="float: right ; margin: 5px;" class="btn btn-danger"
+										   href="{% url "delete-items" order.id %}">Clear All</a>
+									{% endif %}
 								</th>
 							</tr>
 						</table>
@@ -77,7 +79,7 @@
 	        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
 	        crossorigin="anonymous"></script>
 
-	<script type = "text/javascript" src = "{% static "js/cart.js" %}"></script>
+	<script type="text/javascript" src="{% static "js/cart.js" %}"></script>
 
 {% endblock %}
 </body>

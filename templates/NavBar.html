@@ -48,6 +48,7 @@
 
 					<a href="{% url "cart" %}">
 						<img src="{% static "images/c.png" %}" id="cart-icon">
+
 						<p class="float-end" id="cart-total">{{ order.get_cart_items }}</p>
 					</a>
 
