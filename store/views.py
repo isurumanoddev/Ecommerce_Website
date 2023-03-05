@@ -4,20 +4,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 import json
-from store.models import Product, Order, OrderItem
+from store.models import Product, Order, OrderItem, ShippingAddress
 import datetime
 
 
 def store(request):
     products = Product.objects.all()
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order = Order.objects.get(customer=customer)
 
-    else:
-        order = {"get_cart_total": 0, "get_cart_items": 0}
-
-    context = {"products": products, "order": order}
+    context = {"products": products, }
     return render(request, "Store.html", context)
 
 
@@ -99,6 +93,7 @@ def delete_items(request, pk):
     if request.method == "POST":
         if cart_items is not None:
             cart_items.delete()
+            order.delete()
         return redirect("store")
 
     context = {"order": order}
@@ -107,33 +102,29 @@ def delete_items(request, pk):
 
 def process_order(request):
     form_data = json.loads(request.body)
-    name = form_data["userFormData"]["name"]
-    email = form_data["userFormData"]["email"]
-    total = form_data["userFormData"]["total"]
-    print("name :",name)
-    print("email :",email)
-    print("total :",total)
-    address = form_data["shippingInfo"]["address"]
-    city = form_data["shippingInfo"]["city"]
-    state = form_data["shippingInfo"]["state"]
-    zipcode = form_data["shippingInfo"]["zipcode"]
-    country = form_data["shippingInfo"]["country"]
-    print("address :", address)
-    print("city :", city)
-    print("zipcode :", zipcode)
 
     transaction_id = datetime.datetime.now().timestamp()
-    print(transaction_id)
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order ,created = Order.objects.get_or_create(customer=customer,complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         total = float(form_data["userFormData"]["total"])
-        order.transaction_id =transaction_id
-
+        order.transaction_id = transaction_id
         if total == order.get_cart_total:
             order.complete = True
         order.save()
-    else:
-        print("user not log in")
-    return JsonResponse("payment complete......", safe=False)
+
+        if order.shipping == True:
+            ShippingAddress.objects.create(
+                customer=customer,
+                order=order,
+                address=form_data["shippingInfo"]["address"],
+                city=form_data["shippingInfo"]["city"],
+                state=form_data["shippingInfo"]["state"],
+                zip_code=form_data["shippingInfo"]["zipcode"],
+
+            )
+
+        else:
+            print("user not log in")
+        return JsonResponse("payment complete......", safe=False)
