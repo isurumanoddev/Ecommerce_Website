@@ -57,7 +57,6 @@ def user_login(request):
             User.objects.get(username=username)
         except:
             print("user not exist")
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -95,14 +94,30 @@ def update_item(request):
 
 def delete_items(request, pk):
     order = Order.objects.get(id=pk)
+    cart_items = order.orderitem_set.all()
     if request.method == "POST":
-        if order is not None:
-            order.delete()
-        return redirect("cart")
+        if cart_items is not None:
+            cart_items.delete()
+        return redirect("store")
 
     context = {"order": order}
     return render(request, "delete.html", context)
 
 
 def process_order(request):
+    form_data = json.loads(request.body)
+    name = form_data["userFormData"]["name"]
+    email = form_data["userFormData"]["email"]
+    total = form_data["userFormData"]["total"]
+    print("name :",name)
+    print("email :",email)
+    print("total :",total)
+    address = form_data["shippingInfo"]["address"]
+    city = form_data["shippingInfo"]["city"]
+    state = form_data["shippingInfo"]["state"]
+    zipcode = form_data["shippingInfo"]["zipcode"]
+    country = form_data["shippingInfo"]["country"]
+    print("address :", address)
+    print("city :", city)
+    print("zipcode :", zipcode)
     return JsonResponse("payment complete......", safe=False)

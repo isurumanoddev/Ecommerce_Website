@@ -11,7 +11,6 @@
 </head>
 <body>
 {% block content %}
-
 	<h1 class="display-6"> checkout </h1>
 	<div class="container">
 		<div class="row">
@@ -65,9 +64,7 @@
 					<div class="card-body ">
 						<small class="card-title">Payment Options</small>
 						<button id="make-payment" class="btn btn-outline-dark float-end">Make Payment</button>
-
 					</div>
-
 				</div>
 			</div>
 			<div class="col-lg-6">
@@ -75,8 +72,6 @@
 					<div class="card-body">
 						<a class="btn btn-outline-dark" href="{% url "cart" %}">&#x2190; Back To Cart</a>
 					</div>
-
-
 					<hr/>
 					<h3 class="px-3">Order Summary</h3>
 					<hr/>
@@ -90,11 +85,8 @@
 						</div>
 						<hr/>
 					{% endfor %}
-
 					<h5 class="card-title px-3">Items : {{ order.get_cart_items }}</h5>
 					<h5 class="card-title px-3">Total : $ {{ order.get_cart_total|floatformat:2 }}</h5>
-
-
 				</div>
 
 			</div>
@@ -105,26 +97,29 @@
 	        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
 	        crossorigin="anonymous"></script>
 	<script type="text/javascript">
-        const shipping ="{{ order.shipping }}"
-        const total ="{{ order.get_cart_total|floatformat:2 }}"
-		console.log(shipping)
+        const shipping = "{{ order.shipping }}"
+        const total = "{{ order.get_cart_total|floatformat:2 }}"
+        const username = "{{ request.user.username }}"
+        const email = "{{ request.user.email }}"
+
+        console.log(username ,email)
 
         if (shipping === "False") {
             document.getElementById("shipping-info").innerHTML = ""
         }
         if (user !== "AnonymousUser") {
-			document.getElementById("user-info").innerHTML = ""
+            document.getElementById("user-info").innerHTML = ""
         }
-         if (shipping === "False" && user !== "AnonymousUser") {
-			document.getElementById("form-wrapper").classList.add("hidden")
-			document.getElementById("payment-info").classList.remove("hidden")
+        if (shipping === "False" && user !== "AnonymousUser") {
+            document.getElementById("form-wrapper").classList.add("hidden")
+            document.getElementById("payment-info").classList.remove("hidden")
         }
         const form = document.getElementById("form");
         form.addEventListener("submit", function (e) {
             e.preventDefault();
             console.log("submitted..............")
-	        document.getElementById("form-button").classList.add("hidden")
-	        document.getElementById("payment-info").classList.remove("hidden")
+            document.getElementById("form-button").classList.add("hidden")
+            document.getElementById("payment-info").classList.remove("hidden")
         })
 
         document.getElementById("make-payment").addEventListener("click", function (e) {
@@ -134,36 +129,59 @@
         function submitFormData() {
             console.log("payment button clicked")
 
-            const userFormData ={
-                "name":null,
-                "email":null,
-                "total":total,
+            const userFormData = {
+                "name": null,
+                "email": null,
+                "total": total,
             }
-            const shippingInfo ={
-                "address":null,
-                "city":null,
-                "state":null,
-                "zipcode":null,
-                "country":null,
+
+            const shippingInfo = {
+                "address": null,
+                "city": null,
+                "state": null,
+                "zipcode": null,
+                "country": null,
 
 
             }
 
             if (shipping !== "False") {
-				shippingInfo.address = form.address.value
-				shippingInfo.city = form.city.value
-				shippingInfo.state = form.state.value
-				shippingInfo.zipcode = form.zipcode.value
-				shippingInfo.country = form.country.value
+                shippingInfo.address = form.address.value
+                shippingInfo.city = form.city.value
+                shippingInfo.state = form.state.value
+                shippingInfo.zipcode = form.zipcode.value
+                shippingInfo.country = form.country.value
             }
 
-             if (user !== "AnonymousUser") {
-				userFormData.name = form.name.value
-				userFormData.email = form.email.value
+            if (user !== "AnonymousUser") {
+                userFormData.name = username
+                userFormData.email = email
             }
+            console.log(userFormData)
+            const url = "/process_order/";
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+
+                },
+                body: JSON.stringify({"userFormData": userFormData, "shippingInfo": shippingInfo}),
+
+            })
+                .then((response) => {
+                    return response.json()
+                })
+                .then((data) => {
+                    console.log("Success", data)
+                    alert("Transaction Completed")
+                    window.location.href ="{% url "store" %}"
+                })
 
         }
 	</script>
+
 
 {% endblock %}
 </body>
