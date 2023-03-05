@@ -130,6 +130,10 @@ def process_order(request):
         order ,created = Order.objects.get_or_create(customer=customer,complete=False)
         total = float(form_data["userFormData"]["total"])
         order.transaction_id =transaction_id
+
+        if total == order.get_cart_total:
+            order.complete = True
+        order.save()
     else:
         print("user not log in")
     return JsonResponse("payment complete......", safe=False)
