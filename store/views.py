@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 import json
 from store.models import Product, Order, OrderItem
+import datetime
 
 
 def store(request):
@@ -120,4 +121,15 @@ def process_order(request):
     print("address :", address)
     print("city :", city)
     print("zipcode :", zipcode)
+
+    transaction_id = datetime.datetime.now().timestamp()
+    print(transaction_id)
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order ,created = Order.objects.get_or_create(customer=customer,complete=False)
+        total = float(form_data["userFormData"]["total"])
+        order.transaction_id =transaction_id
+    else:
+        print("user not log in")
     return JsonResponse("payment complete......", safe=False)
