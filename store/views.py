@@ -30,7 +30,7 @@ def cart(request):
         items = []
         order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
 
-    context = {"items": items, "order":order}
+    context = {"items": items, "order": order}
     return render(request, "Cart.html", context)
 
 
@@ -73,7 +73,6 @@ def user_logout(request):
 
 
 def update_item(request):
-
     data = json.loads(request.body)
     product_id = data["productId"]
     action = data["action"]
@@ -101,5 +100,9 @@ def delete_items(request, pk):
             order.delete()
         return redirect("cart")
 
-    context = {"order":order }
+    context = {"order": order}
     return render(request, "delete.html", context)
+
+
+def process_order(request):
+    return JsonResponse("payment complete......", safe=False)

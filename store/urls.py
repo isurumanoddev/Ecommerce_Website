@@ -15,5 +15,7 @@ urlpatterns = [
 
     path('update_item/', views.update_item, name="update-item"),
 
+    path('process_order/', views.process_order, name="process-order"),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
