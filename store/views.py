@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 import json
-from store.models import Product, Order, OrderItem, ShippingAddress
+from store.models import Product, Order, OrderItem, ShippingAddress, Customer
 import datetime
 
 
@@ -140,10 +140,16 @@ def user_register(request):
     if request.method == "POST":
 
         form = UserCreationForm(request.POST)
+        username = request.POST.get("username")
+        print("username :",username)
         if form.is_valid():
             user = form.save(commit=False)
-
             user.save()
+            Customer.objects.create(
+                user=user,
+                name=username,
+                email=f"{username}@gmail.com"
+            )
             login(request,user)
             return redirect("store")
     context = {"form":form}
