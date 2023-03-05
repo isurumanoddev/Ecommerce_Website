@@ -1,4 +1,5 @@
 from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -102,14 +103,18 @@ def delete_items(request, pk):
 
 def process_order(request):
     form_data = json.loads(request.body)
+    print(form_data)
+
+    name = form_data["user_form_data"]["name"]
+    email = form_data["user_form_data"]["email"]
+    total = form_data["user_form_data"]["total"]
+    print(name, email)
 
     transaction_id = datetime.datetime.now().timestamp()
-
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(form_data["userFormData"]["total"])
-        order.transaction_id = transaction_id
+        order, created = Order.objects.get_or_create(customer=customer, transaction_id=transaction_id)
+
         if total == order.get_cart_total:
             order.complete = True
         order.save()
@@ -118,13 +123,28 @@ def process_order(request):
             ShippingAddress.objects.create(
                 customer=customer,
                 order=order,
-                address=form_data["shippingInfo"]["address"],
-                city=form_data["shippingInfo"]["city"],
-                state=form_data["shippingInfo"]["state"],
-                zip_code=form_data["shippingInfo"]["zipcode"],
-
+                address=form_data["user_form_data"]["address"],
+                city=form_data["user_form_data"]["city"],
+                state=form_data["user_form_data"]["state"],
+                zip_code=form_data["user_form_data"]["zip_code"],
             )
 
         else:
-            print("user not log in")
-        return JsonResponse("payment complete......", safe=False)
+            print("user not exist")
+
+        return JsonResponse("Order Complete..........", safe=False)
+
+
+def user_register(request):
+    form = UserCreationForm()
+    if request.method == "POST":
+
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+
+            user.save()
+            login(request,user)
+            return redirect("store")
+    context = {"form":form}
+    return render(request, "register.html", context)

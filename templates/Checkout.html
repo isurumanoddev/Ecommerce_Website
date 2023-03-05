@@ -47,10 +47,6 @@
 								<input required class="form-control" type="text" name="zipcode"
 								       placeholder="Zip Code...">
 							</div>
-							<div class="form-field mx-2">
-								<input required class="form-control" type="text" name="country"
-								       placeholder="Country...">
-							</div>
 						</div>
 						<hr/>
 						<div class="d-grid m-4">
@@ -123,63 +119,62 @@
         })
 
         document.getElementById("make-payment").addEventListener("click", function (e) {
-            submitFormData()
+			submitFormData()
         });
 
         function submitFormData() {
-            console.log("payment button clicked")
+            console.log("clicked make payment");
 
-            const userFormData = {
+            const user_form_data = {
                 "name": null,
                 "email": null,
-                "total": total,
-            }
+	            "total":total
 
-            const shippingInfo = {
+            }
+            const shipping_info = {
                 "address": null,
                 "city": null,
                 "state": null,
-                "zipcode": null,
-                "country": null,
+                "zip_code": null,
 
 
             }
-
             if (shipping !== "False") {
-                shippingInfo.address = form.address.value
-                shippingInfo.city = form.city.value
-                shippingInfo.state = form.state.value
-                shippingInfo.zipcode = form.zipcode.value
-                shippingInfo.country = form.country.value
+                shipping_info.address = form.address.value
+                shipping_info.city = form.city.value
+                shipping_info.state = form.state.value
+                shipping_info.zip_code = form.zip_code.value
             }
 
             if (user !== "AnonymousUser") {
-                userFormData.name = username
-                userFormData.email = email
+                user_form_data.name =username
+                user_form_data.email =email
             }
-            console.log(userFormData)
-            const url = "/process_order/";
+            const url = "/process_order/"
 
-            fetch(url, {
+	        fetch(url,{
                 method: "POST",
-                headers: {
+		        headers:{
                     "Content-Type": "application/json",
                     "X-CSRFToken": csrftoken,
 
-                },
-                body: JSON.stringify({"userFormData": userFormData, "shippingInfo": shippingInfo}),
-
-            })
-                .then((response) => {
+		        },
+                body:JSON.stringify({"user_form_data":user_form_data,"shipping_info":shipping_info})
+	        })
+		        .then((response) => {
                     return response.json()
-                })
-                .then((data) => {
-                    console.log("Success", data)
-                    alert("Transaction Completed")
-                    window.location.href ="{% url "store" %}"
-                })
+		        })
+		        .then((data) =>{
+                    console.log("Success",data)
+			        alert("Transaction Completed")
+			        window.location.href ="{% url "store" %}"
+		        })
+
+
 
         }
+
+
 	</script>
 
 
