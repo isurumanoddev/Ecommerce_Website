@@ -12,13 +12,17 @@
 <body>
 
 {% block content %}
+	 <section class="jumbotron text-center">
+        <div class="container">
+          <h1>Welcome to My eCommerce Store</h1>
+          <p class="lead">Browse our latest products and find great deals.</p>
+        </div>
+      </section>
 	<div class="container">
-
-
-		<h1 id="store" class="display-3"> store </h1>
+		<h2 class="text-center mb-4">Featured Products</h2>
 		<div class="row">
 			{% for product in products %}
-				<div class="col-lg-4 mb-3">
+				<div class="col-lg-3 col-mb-3 mb-2">
 					<div class="card h-100">
 						<img class="thumbnail"
 						     src="{{ product.imageURL }}">
@@ -26,11 +30,11 @@
 							<h6 class="card-title"><strong>{{ product.name }}</strong></h6>
 							<div class="card-footer">
 								<button data-product="{{ product.id }}" data-action="add"
-								        class="btn btn-outline-secondary update-cart ">Add to cart
+								        class="btn btn-outline-secondary update-cart btn-sm ">Add to cart
 								</button>
-								<a class="btn btn-outline-success " href="">View</a>
-								<h4 style="display: inline-block ; float: right">
-									$ {{ product.price|floatformat:2 }}</h4>
+								<a class="btn btn-outline-secondary btn-sm " href="">View</a>
+								<h5 style="display: inline-block ; float: right">
+									$ {{ product.price|floatformat:2 }}</h5>
 							</div>
 						</div>
 					</div>
@@ -42,7 +46,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
 	        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
 	        crossorigin="anonymous"></script>
-
 	<script type="text/javascript" src="{% static "js/cart.js" %}"></script>
 {% endblock %}
 </body>
