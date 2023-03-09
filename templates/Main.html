@@ -10,7 +10,7 @@
 	<script>
         const user = "{{ request.user }}"
 
-        function getCookie(name) {
+        function getToken(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
@@ -26,7 +26,45 @@
             return cookieValue;
         }
 
-        const csrftoken = getCookie('csrftoken');
+        const csrftoken = getToken('csrftoken')
+
+        /*    function getCookie(cname) {
+                let name = cname + "=";
+                let ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) === 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+    */
+        function getCookie(name) {
+            let cookieArr = document.cookie.split(";");
+
+            for (let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].split("=");
+
+                if (name === cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+
+                }
+            }
+            return null
+        }
+        let cart = JSON.parse(getCookie("cart"))
+        if (cart === null) {
+            cart = {};
+            console.log("Cart was created")
+            document.cookie = "cart" + JSON.stringify(cart) + ";domain=;path=/"
+        }
+
+        console.log("Cart : ",cart)
+
 	</script>
 
 </head>

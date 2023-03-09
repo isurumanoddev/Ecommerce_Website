@@ -12,9 +12,9 @@ urlpatterns = [
     path('user_logout/', views.user_logout, name="logout"),
     path('user_register/', views.user_register, name="register"),
 
-    path('delete_items/<str:pk>', views.delete_items, name="delete-items"),
+    path('clear_cart/<str:pk>', views.clear_cart, name="clear-cart"),
 
-    path('update_item/', views.update_item, name="update-item"),
+    path('update_cart/', views.update_cart, name="update-cart"),
 
     path('process_order/', views.process_order, name="process-order"),
 

@@ -67,7 +67,7 @@ def user_logout(request):
     return redirect("store")
 
 
-def update_item(request):
+def update_cart(request):
     data = json.loads(request.body)
     product_id = data["productId"]
     action = data["action"]
@@ -88,7 +88,7 @@ def update_item(request):
     return JsonResponse("item was added", safe=False)
 
 
-def delete_items(request, pk):
+def clear_cart(request, pk):
     order = Order.objects.get(id=pk)
     cart_items = order.orderitem_set.all()
     if request.method == "POST":
