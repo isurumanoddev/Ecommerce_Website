@@ -23,8 +23,28 @@ def cart(request):
         items = order.orderitem_set.all()
 
     else:
+        try:
+            cart_ = json.loads(request.COOKIES["cart"])
+            print("cart_item : ", cart_)
+        except:
+            cart_ = {}
+
+        print("cart : ", cart_)
         items = []
+
         order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
+        cart_items = order["get_cart_items"]
+        cart_total = order["get_cart_total"]
+
+        for productID in cart_:
+            cart_items += cart_[productID]["quantity"]
+
+            product = Product.objects.get(id=productID)
+            total = product.price * cart_[productID]["quantity"]
+
+            cart_total += total
+
+
 
     context = {"items": items, "order": order}
     return render(request, "Cart.html", context)
@@ -35,7 +55,7 @@ def checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False, )
         items = order.orderitem_set.all()
-        create = items.create()
+
     else:
         items = []
         order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
@@ -141,7 +161,7 @@ def user_register(request):
 
         form = UserCreationForm(request.POST)
         username = request.POST.get("username")
-        print("username :",username)
+        print("username :", username)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
@@ -150,7 +170,7 @@ def user_register(request):
                 name=username,
                 email=f"{username}@gmail.com"
             )
-            login(request,user)
+            login(request, user)
             return redirect("store")
-    context = {"form":form}
+    context = {"form": form}
     return render(request, "register.html", context)

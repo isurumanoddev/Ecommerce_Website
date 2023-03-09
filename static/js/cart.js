@@ -8,14 +8,37 @@ for (i = 0; i < updateBtns.length; i++) {
         console.log("User : ", user)
 
         if (user === "AnonymousUser") {
+            addCookieItem(productId, action)
 
-            console.log("user not sign in to website");
         } else {
             update_order(productId, action)
 
         }
     });
 }
+
+/*function addCookieItem(productId, action) {
+    console.log("user not sign in to website...");
+    if (action === "add") {
+        if (cart[productId] === undefined) {
+            cart[productId] = {"quantity": 1};
+        } else {
+            cart[productId]["quantity"] += 1
+        }
+
+    }
+    if (action === "remove") {
+        cart[productId]["quantity"] -= 1
+
+        if (cart[productId]["quantity"] <= 0) {
+            console.log("remove idem")
+            delete cart[productId]
+        }
+    }
+    console.log("cart_cookie : ", cart)
+    document.cookie = "cart_cookie" + JSON.stringify(cart) + ";domain=;path=/"
+
+}*/
 
 function update_order(productId, action) {
     console.log("user  log in , sending data......");
@@ -35,6 +58,7 @@ function update_order(productId, action) {
         })
         .then((body) => {
             console.log("body : ", body)
+            window.location.reload()
 
         })
 
